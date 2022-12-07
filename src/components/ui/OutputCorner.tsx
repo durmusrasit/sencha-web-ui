@@ -1,3 +1,4 @@
+import { useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useResponseContext } from "../../contexts/ResponseContext";
 import { outputCornerStyle } from "../../styles";
@@ -7,6 +8,7 @@ import { useRecursiveTimeout } from "../../utils/hooks";
 const DELAYMS_DEFAULT = 1000;
 
 const OutputCorner = () => {
+  const theme = useTheme();
   const [displayStatus, setDisplayStatus] = useState(true);
   const [outputText, setOutputText] = useState<string[]>([]);
   const [textIndex, setTextIndex] = useState(0);
@@ -51,7 +53,11 @@ const OutputCorner = () => {
 
   return displayStatus ? (
     <div style={outputCornerStyle.container}>
-      <div style={outputCornerStyle.text}>{outputText}</div>
+      <div
+        style={{ ...outputCornerStyle.text, color: theme.palette.primary.main }}
+      >
+        {outputText}
+      </div>
     </div>
   ) : (
     <></>

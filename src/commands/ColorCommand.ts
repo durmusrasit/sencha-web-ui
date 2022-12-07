@@ -1,21 +1,18 @@
 import { useResponseContext } from "../contexts/ResponseContext";
-import { useThemeContext } from "../contexts/ThemeContext";
 import { AnyContextType } from "../types";
 import { Config } from "../utils/config.class";
 import { Theme } from "../utils/theme.class";
 import { ICommand } from "./ICommand";
 
 export function InitializeColorCommand(): ICommand {
-  const mainColorContext: AnyContextType = useThemeContext();
   const responseContext: AnyContextType = useResponseContext();
-  return new ColorCommand(mainColorContext, responseContext);
+  return new ColorCommand(responseContext);
 }
 
 export class ColorCommand implements ICommand {
   public name: string = "color";
   public params?: string[] = ["fg", "bg", "both"];
   private startsWithParams?: string[] = ["f", "b"];
-  private mainColorContext: AnyContextType;
   private responseContext: AnyContextType;
 
   private readonly InvalidColorMessage =
@@ -23,11 +20,7 @@ export class ColorCommand implements ICommand {
   private readonly InvalidParameterMessage =
     "Invalid parameter. Valid parameters are: fg, bg, both";
 
-  constructor(
-    mainColorContext: AnyContextType,
-    responseContext: AnyContextType
-  ) {
-    this.mainColorContext = mainColorContext;
+  constructor(responseContext: AnyContextType) {
     this.responseContext = responseContext;
   }
 
@@ -55,7 +48,7 @@ export class ColorCommand implements ICommand {
       return this.setResponseState("colorcode Error", this.InvalidColorMessage);
 
     let config = new Config();
-    let theme = new Theme(this.mainColorContext, this.responseContext);
+    let theme = new Theme(this.responseContext);
     let colors = config.getParsedConfig("themeColors");
 
     if (type === "fg" || type.startsWith("f") || type === "both")

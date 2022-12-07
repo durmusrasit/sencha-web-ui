@@ -1,3 +1,4 @@
+import { useTheme } from "@mui/material";
 import { FC } from "react";
 
 import { mainStyle } from "../../../styles";
@@ -7,7 +8,12 @@ interface Props {
 }
 
 const Text: FC<Props> = (props) => {
-  return <div style={mainStyle.text}>{props.word}</div>;
+  const theme = useTheme();
+  return (
+    <div style={{ ...mainStyle.text, color: theme.palette.primary.main }}>
+      {props.word}
+    </div>
+  );
 };
 
 export default Text;

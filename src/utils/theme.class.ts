@@ -1,18 +1,16 @@
+import { IMainColor } from "../App";
 import { AnyContextType } from "../types";
 import { Config } from "./config.class";
 
 export class Theme extends Config {
   private _themeName = "custom";
   private _data: { [key: string]: string } = {};
-  private colorsObj: { [key: string]: string } = {};
-  private setMainColor;
+  private colorsObj: IMainColor = { background: "", foreground: "" };
   private setResponseState;
 
-  constructor(mainColorState: AnyContextType, responseState: AnyContextType) {
+  constructor(responseState: AnyContextType) {
     super();
-    const { setMainColor } = mainColorState;
     const { setResponseState } = responseState;
-    this.setMainColor = setMainColor;
     this.setResponseState = setResponseState;
   }
 
@@ -23,6 +21,29 @@ export class Theme extends Config {
   set themeName(value: string) {
     this._themeName = value;
     this.refreshTheme();
+  }
+
+  public getColors() {
+    const localStorageColors = super.getParsedConfig("themeColors");
+
+    const localColors = localStorageColors && {
+      background: localStorageColors.background,
+      foreground: localStorageColors.foreground,
+    };
+
+    this.colorsObj = {
+      background: "#000",
+      foreground: "#f2f2f2",
+    }; //localStorageColors ?? ;
+
+    if (localColors) {
+      this.colorsObj = localColors;
+    }
+
+    super.setConfig("themeColors", JSON.stringify(this.colorsObj));
+    //super.setConfig("colorTheme", JSON.stringify(this.themeName));
+
+    return this.colorsObj;
   }
 
   public updateColors(bg: string, fg: string) {
@@ -37,7 +58,7 @@ export class Theme extends Config {
       body: JSON.stringify(this.colorsObj),
     };
 
-    fetch("http://127.0.0.1:1010/themes", requestOptions)
+    fetch("http://127.0.0.1:1010/api/themes", requestOptions)
       .then(async (response) => {
         const isJSON = response.headers
           .get("content-type")
@@ -55,14 +76,12 @@ export class Theme extends Config {
         console.error("There is an error!", error);
       });
 
-    this.setMainColor(this.colorsObj);
-
     super.setConfig("themeColors", JSON.stringify(this.colorsObj));
     super.setConfig("colorTheme", JSON.stringify(this.themeName));
   }
 
   private refreshTheme() {
-    fetch("http://127.0.0.1:1010/themes/" + this.themeName)
+    fetch("http://127.0.0.1:1010/api/themes/" + this.themeName)
       .then(async (response) => {
         if (!response.ok) return Promise.reject(response.status);
         else {
@@ -90,8 +109,6 @@ export class Theme extends Config {
               outputText: ["Theme changed successfully."],
             });
           }
-
-          this.setMainColor(this._data);
 
           super.setConfig("colorTheme", JSON.stringify(this._themeName));
           super.setConfig("themeColors", JSON.stringify(this._data));

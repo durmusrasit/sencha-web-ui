@@ -1,17 +1,18 @@
+import { useTheme } from "@mui/material";
 import { useContext } from "react";
 import { CommandContext } from "../contexts/CommandContext";
 import { InputContext } from "../contexts/InputContext";
 import { RunContext } from "../contexts/RunContext";
-import { ThemeContext } from "../contexts/ThemeContext";
 import { AnyContextType } from "../types";
 
 const TextInput = () => {
-  const mainColorContext: AnyContextType = useContext(ThemeContext);
+  const theme = useTheme();
+  const foreground = theme.palette.primary.main;
+
   const { setIsRunning } = useContext(RunContext);
   const inputContext: AnyContextType = useContext(InputContext);
   const runCommandContext: AnyContextType = useContext(CommandContext);
 
-  const { foreground } = mainColorContext.mainColor;
   const { inputState, setInputState } = inputContext;
   const { runCommand } = runCommandContext;
 

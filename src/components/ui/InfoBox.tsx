@@ -1,19 +1,22 @@
-import { useState, useContext, CSSProperties, FC } from "react";
+import { useContext, FC } from "react";
 
 import { infoBoxStyle } from "../../styles";
 
-import { ThemeContext } from "../../contexts/ThemeContext";
 import { InfoBoxContext } from "../../contexts/InfoBoxContext";
 
 import Typewriter from "typewriter-effect";
 
 import { AnyContextType } from "../../types";
+import { useTheme } from "@mui/material";
 
 export const InfoBox: FC<{}> = ({}) => {
-  const mainColorContext: AnyContextType = useContext(ThemeContext);
+  const theme = useTheme();
+
   const infoBoxContext: AnyContextType = useContext(InfoBoxContext);
 
-  const { background, foreground } = mainColorContext.mainColor;
+  const background = theme.palette.background.default;
+  const foreground = theme.palette.primary.main;
+
   const { infoBox } = infoBoxContext;
 
   const { infoBoxText, infoBoxType } = infoBox;

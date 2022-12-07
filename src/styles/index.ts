@@ -1,7 +1,5 @@
 import { CSSProperties } from "react";
 
-const foreground = document.body.style.color;
-
 const appStyle: { [key: string]: CSSProperties } = {
   body: {
     height: "100vh",
@@ -82,9 +80,7 @@ const infoBoxStyle: { [key: string]: CSSProperties } = {
 const mainStyle: { [key: string]: CSSProperties } = {
   line: {
     marginTop: "2.4em",
-    color: foreground,
     width: "28px",
-    borderTop: `3.2px solid ${foreground}`,
     transitionProperty: "width",
     transitionTimingFunction: "linear",
     userSelect: "none",

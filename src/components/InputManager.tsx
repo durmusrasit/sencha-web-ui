@@ -6,7 +6,6 @@ import {
   ResponseProvider,
   useResponseContext,
 } from "../contexts/ResponseContext";
-import { useThemeContext } from "../contexts/ThemeContext";
 import { CommandContext } from "../contexts/CommandContext";
 
 import AngleUp from "./ui/AngleUp";
@@ -15,15 +14,16 @@ import TerminalInput from "./TerminalInput";
 
 import { CommandRegistry } from "../commands/CommandRegistry";
 
+import { useTheme } from "@mui/material";
+
 import { AnyContextType, InputContextType } from "../types";
 
 export const InputManager = ({ isInputOpen }: { isInputOpen: boolean }) => {
+  const theme = useTheme();
   CommandRegistry.registerAllCommands();
 
-  const mainColorContext: AnyContextType = useThemeContext();
   const responseContext: AnyContextType = useResponseContext();
 
-  const { mainColor } = mainColorContext;
   const { setResponseState } = responseContext;
 
   // Create state variables for inputEnabled and inputValue
@@ -45,8 +45,6 @@ export const InputManager = ({ isInputOpen }: { isInputOpen: boolean }) => {
     }),
     [inputState]
   );
-
-  const { foreground } = mainColor;
 
   const runCommand = (cmdString: string) => {
     let splitCmdString = cmdString.split(" ");
@@ -93,7 +91,7 @@ export const InputManager = ({ isInputOpen }: { isInputOpen: boolean }) => {
                 });
               }}
             >
-              <AngleUp foregroundColor={foreground} />
+              <AngleUp foregroundColor={theme.palette.primary.main} />
             </div>
             {true ? <TextInput /> : <TerminalInput />}
           </div>

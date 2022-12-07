@@ -1,18 +1,13 @@
-import { FC, useContext } from "react";
-
-import { ThemeContext } from "../../contexts/ThemeContext";
+import { useTheme } from "@mui/material";
+import { FC } from "react";
 
 import { appStyle } from "../../styles";
 import { calculateColorBrightness } from "../../utils/functions";
 
-type AnyContextType = {
-  [key: string]: any;
-};
-
 const BootLine: FC<{}> = () => {
-  const mainContext: AnyContextType = useContext(ThemeContext);
+  const theme = useTheme();
 
-  let backgroundColor = mainContext.mainColor.background;
+  let backgroundColor = theme.palette.background.default;
 
   let bootLineColor = calculateColorBrightness(backgroundColor) || "#FFFFFF";
 
